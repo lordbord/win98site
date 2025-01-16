@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☆彡 LORD JORD'S MUSIC 彡☆</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: "MS Sans Serif", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            perspective: 1000px;
+            overflow: hidden;
+        }
+
+        .grid {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            bottom: -50%;
+            left: -50%;
+            background-image: 
+                linear-gradient(rgba(255, 0, 255, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 255, 0.5) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: rotateX(60deg);
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: rotateX(60deg) translateY(0); }
+            100% { transform: rotateX(60deg) translateY(50px); }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .window {
+            backdrop-filter: blur(5px);
+            margin-bottom: 20px;
+            background: rgba(195, 199, 203, 0.85);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .playlist {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .playlist li {
+            padding: 8px;
+            margin: 2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+
+        .playlist li:hover {
+            background: rgba(0, 0, 255, 0.1);
+        }
+
+        .playlist li.active {
+            background: #000080;
+            color: white;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-top: 2px solid #dfdfdf;
+            border-bottom: 2px solid #808080;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: auto;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #fff;
+            border: 2px inset #dfdfdf;
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #000080;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .track-info {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.8em;
+            padding: 10px;
+            text-align: center;
+            color: #000080;
+        }
+
+        button {
+            min-width: 30px;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background">
+        <div class="grid"></div>
+    </div>
+    <div class="container">
+        <div class="window">
+            <div class="title-bar">
+                <div class="title-bar-text">Lord Jord's Music Player</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Minimize"></button>
+                    <button aria-label="Maximize"></button>
+                    <button aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="window-body">
+                <div class="track-info">Now Playing: Select a track</div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="player-controls">
+                    <button id="prevBtn">⏮</button>
+                    <button id="playBtn">▶</button>
+                    <button id="nextBtn">⏭</button>
+                    <button id="shuffleBtn">🔀</button>
+                    <button id="repeatBtn">🔁</button>
+                    <div class="volume-control">
+                        <span>🔊</span>
+                        <input type="range" id="volumeSlider" min="0" max="100" value="50">
+                    </div>
+                </div>
+                <ul class="playlist">
+                    <li data-src="music/Snow%20Strippers%20Ahh%20Beat.mp3">
+                        <span>▶</span> Snow Strippers - Ahh Beat
+                    </li>
+                    <li data-src="music/Superfly%202021-07-21%2018_40_22.wav">
+                        <span>▶</span> Lord Jord - Superfly
+                    </li>
+                    <!-- Add more songs here -->
+                </ul>
+            </div>
+        </div>
+
+        <div class="window">
+            <div class="title-bar">
+                <div class="title-bar-text">Navigation</div>
+            </div>
+            <div class="window-body">
+                <nav>
+                    <button onclick="window.location.href='index.html'">← Back to Home</button>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class MusicPlayer {
+            constructor() {
+                this.audio = new Audio();
+                this.playlist = document.querySelector('.playlist');
+                this.tracks = Array.from(this.playlist.children);
+                this.currentTrack = 0;
+                this.isPlaying = false;
+                this.isRepeat = false;
+                this.isShuffle = false;
+
+                this.setupEventListeners();
+                this.updateTrackInfo();
+            }
+
+            setupEventListeners() {
+                // Play/Pause button
+                document.getElementById('playBtn').addEventListener('click', () => this.togglePlay());
+
+                // Next/Prev buttons
+                document.getElementById('nextBtn').addEventListener('click', () => this.nextTrack());
+                document.getElementById('prevBtn').addEventListener('click', () => this.prevTrack());
+
+                // Shuffle and Repeat
+                document.getElementById('shuffleBtn').addEventListener('click', () => this.toggleShuffle());
+                document.getElementById('repeatBtn').addEventListener('click', () => this.toggleRepeat());
+
+                // Volume control
+                document.getElementById('volumeSlider').addEventListener('input', (e) => {
+                    this.audio.volume = e.target.value / 100;
+                });
+
+                // Playlist clicks
+                this.tracks.forEach((track, index) => {
+                    track.addEventListener('click', () => this.playTrack(index));
+                });
+
+                // Audio events
+                this.audio.addEventListener('ended', () => this.onTrackEnd());
+                this.audio.addEventListener('timeupdate', () => this.updateProgress());
+            }
+
+            togglePlay() {
+                if (this.audio.paused) {
+                    this.audio.play();
+                    document.getElementById('playBtn').textContent = '⏸';
+                } else {
+                    this.audio.pause();
+                    document.getElementById('playBtn').textContent = '▶';
+                }
+            }
+
+            playTrack(index) {
+                this.currentTrack = index;
+                this.audio.src = this.tracks[index].dataset.src;
+                this.audio.play();
+                document.getElementById('playBtn').textContent = '⏸';
+                this.updateTrackInfo();
+                this.updateActiveTrack();
+            }
+
+            nextTrack() {
+                this.currentTrack = (this.currentTrack + 1) % this.tracks.length;
+                this.playTrack(this.currentTrack);
+            }
+
+            prevTrack() {
+                this.currentTrack = (this.currentTrack - 1 + this.tracks.length) % this.tracks.length;
+                this.playTrack(this.currentTrack);
+            }
+
+            toggleShuffle() {
+                this.isShuffle = !this.isShuffle;
+                document.getElementById('shuffleBtn').style.color = this.isShuffle ? '#ff00ff' : '';
+            }
+
+            toggleRepeat() {
+                this.isRepeat = !this.isRepeat;
+                document.getElementById('repeatBtn').style.color = this.isRepeat ? '#ff00ff' : '';
+            }
+
+            onTrackEnd() {
+                if (this.isRepeat) {
+                    this.audio.play();
+                } else if (this.isShuffle) {
+                    const nextTrack = Math.floor(Math.random() * this.tracks.length);
+                    this.playTrack(nextTrack);
+                } else {
+                    this.nextTrack();
+                }
+            }
+
+            updateProgress() {
+                const progress = (this.audio.currentTime / this.audio.duration) * 100 || 0;
+                document.querySelector('.progress-fill').style.width = `${progress}%`;
+            }
+
+            updateTrackInfo() {
+                const trackName = this.tracks[this.currentTrack].textContent;
+                document.querySelector('.track-info').textContent = `Now Playing: ${trackName}`;
+            }
+
+            updateActiveTrack() {
+                this.tracks.forEach(track => track.classList.remove('active'));
+                this.tracks[this.currentTrack].classList.add('active');
+            }
+        }
+
+        // Initialize player when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const player = new MusicPlayer();
+        });
+    </script>
+</body>
+</html> 

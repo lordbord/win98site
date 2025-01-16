@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☆彡 VAPORWAVE MESSAGES 彡☆</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAFVBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAASAQCkAAAABnRSTlMAIEDfv4BbNxKCAAAAAWJLR0QAiAUdSAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB+cMGQ4sNYwHyYQAAAA/SURBVCjPY2CgEmBUVFQUhDKYFRUVBaEMoQAGKEMkQFERxmBJUISyRQIUFWEMEQZFKFskQFERxhAJUFSEMQYAK2MFj5YMKhMAAAAASUVORK5CYII='), auto;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .window {
+            backdrop-filter: blur(5px);
+            background: rgba(195, 199, 203, 0.85);
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        button {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.8em;
+            transition: transform 0.2s;
+            cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAHlBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC3KG9qAAAACXRSTlMAQN8gv4BgEDBwqpzGAAAAAWJLR0QAiAUdSAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB+cMGQ4tBnvL+u8AAABISURBVCjPY2AgDTAqKioKQhnMioqKglCGUAADlCESoKgIY7AEKELZIgGKijCGCIMilC0SoKgIY4gEKCrCGCIBioowxgAAACIqBZFYaWkVAAAAAElFTkSuQmCC'), pointer;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+        }
+
+        #debug {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-family: monospace;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div id="debug"></div>
+    <div class="controls">
+        <div class="window">
+            <div class="title-bar">
+                <div class="title-bar-text">Message Controls</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Minimize"></button>
+                    <button aria-label="Maximize"></button>
+                    <button aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="window-body">
+                <div class="control-buttons">
+                    <button id="toggleRotation">Pause Rotation</button>
+                    <button onclick="window.location.href='index.html'">Back to Site</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Debug function
+        function debug(msg) {
+            document.getElementById('debug').textContent = msg;
+        }
+
+        // Three.js setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Create message group
+        const messageGroup = new THREE.Group();
+        scene.add(messageGroup);
+
+        // Add some lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        directionalLight.position.set(0, 1, 1);
+        scene.add(directionalLight);
+
+        // Font loader
+        const loader = new THREE.FontLoader();
+        
+        // Create default message while waiting for signatures
+        const defaultMessages = [
+            "Welcome to the digital void...",
+            "Sign the guestbook!",
+            "Vaporwave forever",
+            "Windows 98 lives"
+        ];
+
+        function createText(font, message, index) {
+            try {
+                const messageGeometry = new THREE.TextGeometry(message.substring(0, 30), {
+                    font: font,
+                    size: 1,
+                    height: 0.2,
+                    curveSegments: 12,
+                    bevelEnabled: true,
+                    bevelThickness: 0.03,
+                    bevelSize: 0.02,
+                    bevelOffset: 0,
+                    bevelSegments: 5
+                });
+
+                messageGeometry.computeBoundingBox();
+                const centerOffset = -0.5 * (messageGeometry.boundingBox.max.x - messageGeometry.boundingBox.min.x);
+
+                const colors = [0xff00ff, 0x00ffff, 0xff1493, 0x00ff00];
+                const material = new THREE.MeshPhongMaterial({
+                    color: colors[index % colors.length],
+                    emissive: colors[index % colors.length],
+                    emissiveIntensity: 0.2,
+                    specular: 0xffffff
+                });
+
+                const textMesh = new THREE.Mesh(messageGeometry, material);
+
+                // Position in a spiral
+                const angle = (index / 4) * Math.PI * 2;
+                const radius = 15;
+                textMesh.position.x = Math.cos(angle) * radius + centerOffset;
+                textMesh.position.z = Math.sin(angle) * radius;
+                textMesh.position.y = index * 3 - 5;
+
+                // Rotate to face center
+                textMesh.rotation.y = -angle;
+
+                messageGroup.add(textMesh);
+                debug(`Added message: ${message}`);
+            } catch (error) {
+                debug(`Error creating text: ${error.message}`);
+            }
+        }
+
+        loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function(font) {
+            try {
+                // First add default messages
+                defaultMessages.forEach((msg, index) => {
+                    createText(font, msg, index);
+                });
+
+                // Then try to load signatures
+                const savedSignatures = localStorage.getItem('guestbookSignatures');
+                if (savedSignatures) {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = savedSignatures;
+                    const signatureElements = tempDiv.getElementsByClassName('signature');
+                    
+                    Array.from(signatureElements).forEach((sig, index) => {
+                        const message = sig.querySelector('div').textContent;
+                        createText(font, message, index + defaultMessages.length);
+                    });
+                }
+            } catch (error) {
+                debug(`Error in font loader: ${error.message}`);
+            }
+        });
+
+        // Position camera
+        camera.position.z = 30;
+        camera.position.y = 10;
+        camera.lookAt(0, 0, 0);
+
+        // Animation controls
+        let isRotating = true;
+        const toggleBtn = document.getElementById('toggleRotation');
+        
+        toggleBtn.addEventListener('click', () => {
+            isRotating = !isRotating;
+            toggleBtn.textContent = isRotating ? 'Pause Rotation' : 'Resume Rotation';
+        });
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (isRotating) {
+                messageGroup.rotation.y += 0.005;
+            }
+
+            // Make messages float up and down
+            messageGroup.children.forEach((mesh, index) => {
+                mesh.position.y += Math.sin(Date.now() * 0.001 + index) * 0.01;
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+    </script>
+</body>
+</html> 

@@ -1,0 +1,47 @@
+.web-player {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+    width: 300px;
+}
+
+.player-window {
+    background: rgba(195, 199, 203, 0.85);
+    backdrop-filter: blur(5px);
+}
+
+.player-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+}
+
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.volume-control input {
+    width: 80px;
+}
+
+.track-info {
+    padding: 5px 10px;
+    font-family: "MS Sans Serif", Arial, sans-serif;
+    font-size: 0.9em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Global cursor styles */
+body {
+    cursor: url('https://cur.cursors-4u.net/cursors/cur-2/cur117.cur'), auto !important;
+}
+
+button, a, [role="button"], .title-bar-controls button {
+    cursor: url('https://cur.cursors-4u.net/cursors/cur-2/cur116.cur'), pointer !important;
+} 

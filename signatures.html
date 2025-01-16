@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☆彡 SIGNATURE BOARD 彡☆</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: "MS Sans Serif", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            perspective: 1000px;
+            overflow: hidden;
+        }
+
+        .grid {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            bottom: -50%;
+            left: -50%;
+            background-image: 
+                linear-gradient(rgba(255, 0, 255, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 255, 0.5) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: rotateX(60deg);
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: rotateX(60deg) translateY(0); }
+            100% { transform: rotateX(60deg) translateY(50px); }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .window {
+            backdrop-filter: blur(5px);
+            margin-bottom: 20px;
+            background: rgba(195, 199, 203, 0.85);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .signature-form {
+            padding: 16px;
+        }
+
+        .signature-input {
+            width: 100%;
+            min-height: 100px;
+            margin: 10px 0;
+            font-family: "MS Sans Serif", Arial, sans-serif;
+            resize: vertical;
+        }
+
+        .signature-board {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            background: white;
+            margin: 10px;
+            border: 2px inset #dfdfdf;
+        }
+
+        .signature {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f0f0f0;
+            border: 1px solid #dfdfdf;
+        }
+
+        .signature-meta {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 5px;
+            font-family: 'Press Start 2P', monospace;
+        }
+
+        button {
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+        }
+
+        .blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background">
+        <div class="grid"></div>
+    </div>
+    <div class="container">
+        <div class="window">
+            <div class="title-bar">
+                <div class="title-bar-text">✧ Sign My Guestbook ✧</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Minimize"></button>
+                    <button aria-label="Maximize"></button>
+                    <button aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="window-body">
+                <div class="signature-form">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" maxlength="50">
+                    <label for="message">Message:</label>
+                    <textarea id="message" class="signature-input" maxlength="500" placeholder="Leave your mark..."></textarea>
+                    <button onclick="addSignature()">Sign Guestbook</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="window">
+            <div class="title-bar">
+                <div class="title-bar-text">✧ Signatures ✧</div>
+            </div>
+            <div class="window-body">
+                <div class="signature-board" id="signatureBoard">
+                    <div class="signature">
+                        <div>First! Welcome to the digital realm ~</div>
+                        <div class="signature-meta">- Admin | 2024</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="window">
+            <div class="title-bar">
+                <div class="title-bar-text">Navigation</div>
+            </div>
+            <div class="window-body">
+                <nav>
+                    <button onclick="window.location.href='index.html'">← Back to Home</button>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function addSignature() {
+            const name = document.getElementById('name').value.trim();
+            const message = document.getElementById('message').value.trim();
+            
+            if (!name || !message) {
+                alert('Please fill in both name and message!');
+                return;
+            }
+
+            const board = document.getElementById('signatureBoard');
+            const date = new Date().toLocaleDateString();
+            
+            const signature = document.createElement('div');
+            signature.className = 'signature';
+            signature.innerHTML = `
+                <div>${message}</div>
+                <div class="signature-meta">- ${name} | ${date}</div>
+            `;
+
+            board.insertBefore(signature, board.firstChild);
+            
+            // Clear form
+            document.getElementById('name').value = '';
+            document.getElementById('message').value = '';
+
+            // Save to localStorage
+            saveSignatures();
+        }
+
+        function saveSignatures() {
+            const signatures = document.getElementById('signatureBoard').innerHTML;
+            localStorage.setItem('guestbookSignatures', signatures);
+        }
+
+        function loadSignatures() {
+            const signatures = localStorage.getItem('guestbookSignatures');
+            if (signatures) {
+                document.getElementById('signatureBoard').innerHTML = signatures;
+            }
+        }
+
+        // Load saved signatures when page loads
+        document.addEventListener('DOMContentLoaded', loadSignatures);
+    </script>
+</body>
+</html> 

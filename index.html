@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☆彡 LORD JORD'S DOMAIN 彡☆</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Grid background */
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            perspective: 1000px;
+            overflow: hidden;
+        }
+
+        .grid {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            bottom: -50%;
+            left: -50%;
+            background-image: 
+                linear-gradient(rgba(255, 0, 255, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 255, 0.5) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: rotateX(60deg);
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% {
+                transform: rotateX(60deg) translateY(0);
+            }
+            100% {
+                transform: rotateX(60deg) translateY(50px);
+            }
+        }
+
+        body {
+            font-family: "MS Sans Serif", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .window {
+            backdrop-filter: blur(5px);
+            margin-bottom: 20px;
+            background: rgba(195, 199, 203, 0.85);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .marquee {
+            background: black;
+            color: #ff00ff;
+            padding: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            font-size: 1.2em;
+            text-align: center;
+        }
+
+        .marquee span {
+            display: inline-block;
+            animation: marquee 45s linear infinite;
+            padding-left: 100%;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-200%); }
+        }
+
+        .blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .guestbook {
+            background: white;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        .counter {
+            text-align: center;
+            margin: 20px 0;
+            font-family: "Courier New", monospace;
+            background: black;
+            color: lime;
+            padding: 5px;
+            display: inline-block;
+        }
+
+        button {
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+        }
+
+        .construction-text {
+            background: black;
+            color: yellow;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: "Press Start 2P", monospace;
+            text-align: center;
+            letter-spacing: 0.5em;
+            animation: blink-construction 1s step-end infinite;
+        }
+
+        @keyframes blink-construction {
+            50% { color: red; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background">
+        <div class="grid"></div>
+    </div>
+    <div class="container">
+        <button id="muteButton" 
+                style="position: fixed; top: 20px; right: 20px; z-index: 1000; 
+                       font-family: 'Press Start 2P', monospace; padding: 8px; 
+                       background: rgba(0,0,0,0.5); color: #ff00ff; border: none; 
+                       cursor: pointer; backdrop-filter: blur(5px);">
+            🔊 SOUND ON
+        </button>
+        <div class="window">
+            <div class="title-bar">
+                <div class="title-bar-text">☆彡 Welcome to Lord Jord's Domain 彡☆</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Minimize"></button>
+                    <button aria-label="Maximize"></button>
+                    <button aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="window-body">
+                <div class="marquee">
+                    <span>
+                        ✧･ﾟ: *✧･ﾟ:* W E L C O M E · T O · M Y · C O R N E R · O F · T H E · I N T E R N E T *:･ﾟ✧*:･ﾟ✧ · · · 
+                        L O A D I N G · V A P O R W A V E · A E S T H E T I C S · · · 
+                        E N T E R I N G · T H E · D I G I T A L · V O I D · · · 
+                        P R E S S · A N Y · K E Y · T O · C O N T I N U E · · ·
+                    </span>
+                </div>
+                
+                <div class="construction-text">
+                    U N D E R · C O N S T R U C T I O N
+                </div>
+                
+                <div style="text-align: center; margin: 15px 0;">
+                    <p>
+                        <a href="about.html" style="color: #ff00ff; text-decoration: none; text-shadow: 2px 2px #00ffff;">
+                            <span style="font-size: 2em; font-family: 'Press Start 2P', monospace; display: inline-block; transform: translateY(4px);">
+                                LORD JORD
+                            </span>
+                        </a> 
+                        <span class="blink">_</span>
+                    </p>
+                    <div style="color: #666; font-family: 'Press Start 2P', monospace; font-size: 0.8em; margin-top: 10px;">
+                        lvl 23 computer mage from canada.exe
+                    </div>
+                </div>
+
+                <div class="guestbook">
+                    <h2>📖 Guestbook</h2>
+                    <p>Leave your mark in the digital realm!</p>
+                    <button onclick="window.location.href='signatures.html'">✍️ Sign Guestbook</button>
+                </div>
+
+                <div style="text-align: center;">
+                    <div class="counter">
+                        Visitors: 000000
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="window">
+            <div class="title-bar">
+                <div class="title-bar-text">Navigation</div>
+            </div>
+            <div class="window-body">
+                <nav>
+                    <button onclick="window.location.href='about.html'">👤 About Me</button>
+                    <button onclick="window.location.href='music.html'">🎵 My Music</button>
+                    <button onclick="window.location.href='#'">💻 Computer Stuff</button>
+                    <button onclick="window.location.href='#'">🎨 Art Gallery</button>
+                    <button onclick="window.location.href='background.html'">🌌 View Background</button>
+                </nav>
+            </div>
+        </div>
+
+        <div class="window">
+            <div class="title-bar">
+                <div class="title-bar-text">Current Status</div>
+            </div>
+            <div class="window-body" style="padding: 10px;">
+                <p>🎓 Studying Computer Science</p>
+                <p>🛠️ Working on: Random Projects</p>
+                <p>🎮 Playing: Tetris & VR Games</p>
+                <p>💭 Status: Trying to make something good of these strange hi-tech times</p>
+            </div>
+        </div>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="music/Snow%20Strippers%20Ahh%20Beat.mp3" type="audio/mp3">
+    </audio>
+    <!-- Sound effects -->
+    <audio id="clickSound" preload="auto">
+        <source src="https://www.myinstants.com/media/sounds/click.mp3" type="audio/mp3">
+    </audio>
+    <audio id="hoverSound" preload="auto">
+        <source src="https://www.myinstants.com/media/sounds/hover.mp3" type="audio/mp3">
+    </audio>
+    <script>
+        // Keep visitor counter functionality
+        function updateVisitorCount() {
+            // Get the counter element
+            const counterElement = document.querySelector('.counter');
+            
+            // Get current count from localStorage or start at 0
+            let visitorCount = localStorage.getItem('visitorCount');
+            
+            if (!visitorCount) {
+                // First visit
+                visitorCount = 1;
+            } else {
+                // Check if this is a new session
+                const lastVisit = localStorage.getItem('lastVisit');
+                const now = Date.now();
+                
+                // If last visit was more than 1 hour ago or doesn't exist, increment counter
+                if (!lastVisit || (now - lastVisit) > 3600000) {
+                    visitorCount = parseInt(visitorCount) + 1;
+                }
+            }
+            
+            // Store the updated count and last visit time
+            localStorage.setItem('visitorCount', visitorCount);
+            localStorage.setItem('lastVisit', Date.now());
+            
+            // Format the number with leading zeros
+            const formattedCount = visitorCount.toString().padStart(6, '0');
+            
+            // Update the counter display
+            counterElement.textContent = `Visitors: ${formattedCount}`;
+        }
+
+        // Call the function when page loads
+        updateVisitorCount();
+
+        // Keep audio controls
+        const bgMusic = document.getElementById('bgMusic');
+        
+        // Start playing when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            bgMusic.play().catch(() => {
+                console.log('Autoplay prevented. Click sound button to start music.');
+            });
+        });
+        
+        const muteButton = document.getElementById('muteButton');
+        
+        muteButton.addEventListener('click', () => {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                muteButton.textContent = '🔊 SOUND ON';
+            } else {
+                bgMusic.pause();
+                muteButton.textContent = '🔈 SOUND OFF';
+            }
+        });
+
+        // Sound Effects Setup
+        const clickSound = document.getElementById('clickSound');
+        const hoverSound = document.getElementById('hoverSound');
+        
+        // Add sound effects to all buttons and links
+        document.querySelectorAll('button, a').forEach(element => {
+            element.addEventListener('click', () => {
+                clickSound.currentTime = 0;
+                clickSound.play();
+            });
+            
+            element.addEventListener('mouseenter', () => {
+                hoverSound.currentTime = 0;
+                hoverSound.play();
+            });
+        });
+
+        // Make sounds quieter than the music
+        clickSound.volume = 0.3;
+        hoverSound.volume = 0.2;
+    </script>
+</body>
+</html> 

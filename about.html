@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☆彡 ABOUT LORD JORD 彡☆</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            font-family: "MS Sans Serif", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .window {
+            backdrop-filter: blur(5px);
+            margin-bottom: 20px;
+            background: rgba(195, 199, 203, 0.85);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .stats-box {
+            border: 2px solid #000;
+            padding: 10px;
+            margin: 10px;
+            background: #000080;
+            color: #00ff00;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.8em;
+        }
+
+        .stat-line {
+            margin: 5px 0;
+        }
+
+        .progress-bar {
+            background: #363636;
+            height: 20px;
+            margin: 5px 0;
+            border: 2px solid #00ff00;
+        }
+
+        .progress-fill {
+            background: #00ff00;
+            height: 100%;
+            width: 23%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .pixel-art {
+            image-rendering: pixelated;
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+        }
+
+        .quest-log {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7em;
+            padding: 10px;
+            background: #000;
+            color: #00ff00;
+            margin: 10px;
+            border: 2px solid #00ff00;
+        }
+
+        .quest-item {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .quest-item::before {
+            content: ">";
+            margin-right: 10px;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .back-button {
+            margin: 10px;
+            font-family: 'Press Start 2P', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="window">
+            <div class="title-bar">
+                <div class="title-bar-text">Character Stats - Lord Jord</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Minimize"></button>
+                    <button aria-label="Maximize"></button>
+                    <button aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="window-body">
+                <div class="stats-box">
+                    <div class="stat-line">NAME: LORD_JORD</div>
+                    <div class="stat-line">CLASS: COMPUTER_MAGE</div>
+                    <div class="stat-line">LEVEL: 23</div>
+                    <div class="stat-line">LOCATION: CANADA.exe</div>
+                    <div class="stat-line">XP TO NEXT LEVEL:</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="quest-log">
+                    <h3>ACTIVE QUESTS</h3>
+                    <div class="quest-item">MASTER THE TETRIS ARTS</div>
+                    <div class="quest-item">EXPLORE VIRTUAL REALMS</div>
+                    <div class="quest-item">DECODE THE DIGITAL AGE</div>
+                    <div class="quest-item">CREATE CYBER SANCTUARY</div>
+                </div>
+
+                <div class="window" style="margin: 10px;">
+                    <div class="title-bar">
+                        <div class="title-bar-text">Character Bio</div>
+                    </div>
+                    <div class="window-body" style="padding: 10px;">
+                        <p>In the neon-lit corners of cyberspace dwells Lord Jord, a level 23 Computer Mage seeking to unravel the mysteries of the digital realm. Born in the frozen lands of Canada.exe, this young techno-wizard spends their days mastering the ancient art of Tetris and exploring the vast landscapes of virtual reality.</p>
+                        
+                        <p>Having achieved the rank of Block Stacker Supreme in Tetris, Lord Jord now seeks to bridge the gap between the virtual and the real, creating digital sanctuaries for fellow travelers of the information superhighway.</p>
+                        
+                        <p>Current Mission: Navigating these strange hi-tech times while trying to create something meaningful in the digital void. Specializes in weaving vaporwave aesthetics with retro computing magic.</p>
+                    </div>
+                </div>
+
+                <div class="window" style="margin: 10px;">
+                    <div class="title-bar">
+                        <div class="title-bar-text">Skills & Abilities</div>
+                    </div>
+                    <div class="window-body" style="padding: 10px;">
+                        <ul>
+                            <li>🎮 Tetris Mastery: Level 89</li>
+                            <li>🕶️ VR Navigation: Level 75</li>
+                            <li>💾 Retro Tech Affinity: Level 92</li>
+                            <li>🌐 Cyberspace Exploration: Level 67</li>
+                            <li>🎨 Vaporwave Manifestation: Level 83</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="back-button">
+                    <button onclick="window.location.href='index.html'">← Return to Homepage</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
