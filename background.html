@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>☆彡 VAPORWAVE MESSAGES 彡☆</title>
+    <title>☆彡 THE VOID 彡☆</title>
     <link rel="stylesheet" href="https://unpkg.com/98.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -12,8 +12,7 @@
         body {
             margin: 0;
             overflow: hidden;
-            background: linear-gradient(45deg, #ff00ff, #00ffff);
-            cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAFVBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAASAQCkAAAABnRSTlMAIEDfv4BbNxKCAAAAAWJLR0QAiAUdSAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB+cMGQ4sNYwHyYQAAAA/SURBVCjPY2CgEmBUVFQUhDKYFRUVBaEMoQAGKEMkQFERxmBJUISyRQIUFWEMEQZFKFskQFERxhAJUFSEMQYAK2MFj5YMKhMAAAAASUVORK5CYII='), auto;
+            background: black;
         }
 
         .controls {
@@ -38,7 +37,6 @@
             font-family: 'Press Start 2P', monospace;
             font-size: 0.8em;
             transition: transform 0.2s;
-            cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAHlBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC3KG9qAAAACXRSTlMAQN8gv4BgEDBwqpzGAAAAAWJLR0QAiAUdSAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB+cMGQ4tBnvL+u8AAABISURBVCjPY2AgDTAqKioKQhnMioqKglCGUAADlCESoKgIY7AEKELZIgGKijCGCIMilC0SoKgIY4gEKCrCGCIBioowxgAAACIqBZFYaWkVAAAAAElFTkSuQmCC'), pointer;
         }
 
         button:hover {
@@ -49,7 +47,7 @@
             position: fixed;
             top: 10px;
             left: 10px;
-            color: white;
+            color: #ff00ff;
             font-family: monospace;
             z-index: 1000;
         }
@@ -60,7 +58,7 @@
     <div class="controls">
         <div class="window">
             <div class="title-bar">
-                <div class="title-bar-text">Message Controls</div>
+                <div class="title-bar-text">Void Controls</div>
                 <div class="title-bar-controls">
                     <button aria-label="Minimize"></button>
                     <button aria-label="Maximize"></button>
@@ -69,8 +67,8 @@
             </div>
             <div class="window-body">
                 <div class="control-buttons">
-                    <button id="toggleRotation">Pause Rotation</button>
-                    <button onclick="window.location.href='index.html'">Back to Site</button>
+                    <button id="toggleRotation">Pause Void</button>
+                    <button onclick="window.location.href='index.html'">Exit Void</button>
                 </div>
             </div>
         </div>
@@ -94,21 +92,88 @@
         scene.add(messageGroup);
 
         // Add some lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        const ambientLight = new THREE.AmbientLight(0xff00ff, 0.2);
         scene.add(ambientLight);
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        const directionalLight = new THREE.DirectionalLight(0x00ffff, 0.5);
         directionalLight.position.set(0, 1, 1);
         scene.add(directionalLight);
+
+        // Create particle system
+        const particleGeometry = new THREE.BufferGeometry();
+        const particleCount = 1000;
+        const positions = new Float32Array(particleCount * 3);
+        const colors = new Float32Array(particleCount * 3);
+
+        for(let i = 0; i < particleCount * 3; i += 3) {
+            positions[i] = (Math.random() - 0.5) * 100;
+            positions[i + 1] = (Math.random() - 0.5) * 100;
+            positions[i + 2] = (Math.random() - 0.5) * 100;
+
+            colors[i] = Math.random();
+            colors[i + 1] = Math.random();
+            colors[i + 2] = Math.random();
+        }
+
+        particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+        const particleMaterial = new THREE.PointsMaterial({
+            size: 0.5,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.8
+        });
+
+        const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+        scene.add(particleSystem);
+
+        // Create geometric shapes
+        const shapes = new THREE.Group();
+        
+        // Torus
+        const torusGeometry = new THREE.TorusGeometry(10, 1, 16, 100);
+        const torusMaterial = new THREE.MeshPhongMaterial({
+            color: 0xff00ff,
+            wireframe: true,
+            emissive: 0xff00ff,
+            emissiveIntensity: 0.2
+        });
+        const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+        shapes.add(torus);
+
+        // Icosahedron
+        const icoGeometry = new THREE.IcosahedronGeometry(5, 0);
+        const icoMaterial = new THREE.MeshPhongMaterial({
+            color: 0x00ffff,
+            wireframe: true,
+            emissive: 0x00ffff,
+            emissiveIntensity: 0.2
+        });
+        const icosahedron = new THREE.Mesh(icoGeometry, icoMaterial);
+        shapes.add(icosahedron);
+
+        // Octahedron
+        const octaGeometry = new THREE.OctahedronGeometry(3, 0);
+        const octaMaterial = new THREE.MeshPhongMaterial({
+            color: 0xff1493,
+            wireframe: true,
+            emissive: 0xff1493,
+            emissiveIntensity: 0.2
+        });
+        const octahedron = new THREE.Mesh(octaGeometry, octaMaterial);
+        shapes.add(octahedron);
+
+        scene.add(shapes);
 
         // Font loader
         const loader = new THREE.FontLoader();
         
-        // Create default message while waiting for signatures
-        const defaultMessages = [
-            "Welcome to the digital void...",
-            "Sign the guestbook!",
-            "Vaporwave forever",
-            "Windows 98 lives"
+        // Create void messages
+        const voidMessages = [
+            "Welcome to the void...",
+            "You are not alone...",
+            "The void welcomes you...",
+            "Digital dreams live here..."
         ];
 
         function createText(font, message, index) {
@@ -132,7 +197,7 @@
                 const material = new THREE.MeshPhongMaterial({
                     color: colors[index % colors.length],
                     emissive: colors[index % colors.length],
-                    emissiveIntensity: 0.2,
+                    emissiveIntensity: 0.5,
                     specular: 0xffffff
                 });
 
@@ -157,8 +222,8 @@
 
         loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function(font) {
             try {
-                // First add default messages
-                defaultMessages.forEach((msg, index) => {
+                // First add void messages
+                voidMessages.forEach((msg, index) => {
                     createText(font, msg, index);
                 });
 
@@ -171,7 +236,7 @@
                     
                     Array.from(signatureElements).forEach((sig, index) => {
                         const message = sig.querySelector('div').textContent;
-                        createText(font, message, index + defaultMessages.length);
+                        createText(font, message, index + voidMessages.length);
                     });
                 }
             } catch (error) {
@@ -190,7 +255,7 @@
         
         toggleBtn.addEventListener('click', () => {
             isRotating = !isRotating;
-            toggleBtn.textContent = isRotating ? 'Pause Rotation' : 'Resume Rotation';
+            toggleBtn.textContent = isRotating ? 'Pause Void' : 'Resume Void';
         });
 
         // Animation loop
@@ -199,11 +264,30 @@
 
             if (isRotating) {
                 messageGroup.rotation.y += 0.005;
+                shapes.rotation.y += 0.01;
+                shapes.rotation.x += 0.005;
+                
+                // Animate particles
+                particleSystem.rotation.y += 0.001;
+                const positions = particleSystem.geometry.attributes.position.array;
+                for(let i = 0; i < positions.length; i += 3) {
+                    positions[i + 1] += Math.sin(Date.now() * 0.001 + i) * 0.01;
+                }
+                particleSystem.geometry.attributes.position.needsUpdate = true;
+
+                // Animate shapes
+                torus.rotation.x += 0.01;
+                torus.rotation.y += 0.01;
+                icosahedron.rotation.x -= 0.005;
+                icosahedron.rotation.z += 0.005;
+                octahedron.rotation.y += 0.02;
+                octahedron.rotation.z -= 0.01;
             }
 
-            // Make messages float up and down
+            // Make messages float in the void
             messageGroup.children.forEach((mesh, index) => {
                 mesh.position.y += Math.sin(Date.now() * 0.001 + index) * 0.01;
+                mesh.rotation.z = Math.sin(Date.now() * 0.0005 + index) * 0.1;
             });
 
             renderer.render(scene, camera);
