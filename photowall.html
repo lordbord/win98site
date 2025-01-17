@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☆彡 PHOTO WALL 彡☆</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="transitions.css">
+    <style>
+        body {
+            font-family: "MS Sans Serif", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            perspective: 1000px;
+            overflow: hidden;
+        }
+
+        .grid {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            bottom: -50%;
+            left: -50%;
+            background-image: 
+                linear-gradient(rgba(255, 0, 255, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 255, 0.5) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: rotateX(60deg);
+            animation: gridMove 20s linear infinite;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .window {
+            backdrop-filter: blur(5px);
+            margin-bottom: 20px;
+            background: rgba(195, 199, 203, 0.85);
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            padding: 16px;
+        }
+
+        .photo-item {
+            position: relative;
+            background: white;
+            border: 2px solid;
+            border-color: #dfdfdf #808080 #808080 #dfdfdf;
+            padding: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .photo-item:hover {
+            transform: scale(1.02);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+            image-rendering: pixelated;
+        }
+
+        .photo-item .title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7em;
+            margin-top: 8px;
+            text-align: center;
+            color: #000080;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .modal-window {
+            background: rgba(195, 199, 203, 0.95);
+            padding: 16px;
+            border: 2px solid;
+            border-color: #dfdfdf #808080 #808080 #dfdfdf;
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 70vh;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .modal-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.8em;
+            margin-top: 16px;
+            text-align: center;
+            color: #000080;
+        }
+
+        .close-button {
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            font-family: 'Press Start 2P', monospace;
+            background: #c3c7cb;
+            border: 2px solid;
+            border-color: #dfdfdf #808080 #808080 #dfdfdf;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 20px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.8em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background">
+        <div class="grid"></div>
+    </div>
+    <div class="container">
+        <div class="window">
+            <div class="title-bar">
+                <div class="title-bar-text">✧ Photo Wall ✧</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Minimize"></button>
+                    <button aria-label="Maximize"></button>
+                    <button aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="window-body">
+                <div id="photoGrid" class="photo-grid">
+                    <!-- Photos will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="window">
+            <div class="title-bar">
+                <div class="title-bar-text">Navigation</div>
+            </div>
+            <div class="window-body">
+                <nav>
+                    <button onclick="handleBackToHome()">← Back to Home</button>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for enlarged photos -->
+    <div id="photoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-window">
+                <button class="close-button" onclick="closeModal()">×</button>
+                <img id="modalImage" class="modal-image" src="" alt="Enlarged photo">
+                <div id="modalTitle" class="modal-title"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="transitions.js"></script>
+    <script>
+        // Function to load photos from the photowall folder
+        async function loadPhotos() {
+            const photoGrid = document.getElementById('photoGrid');
+            
+            try {
+                const response = await fetch('photowall/');
+                if (!response.ok) {
+                    throw new Error('Failed to load photos');
+                }
+                
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const links = Array.from(doc.querySelectorAll('a'))
+                    .filter(link => link.href.match(/\.(jpg|jpeg|png|gif)$/i));
+
+                if (links.length === 0) {
+                    photoGrid.innerHTML = `
+                        <div class="empty-message">
+                            No photos found in the photowall folder.<br>
+                            Add some .jpg, .png, or .gif files to get started!
+                        </div>
+                    `;
+                    return;
+                }
+
+                links.forEach(link => {
+                    const fileName = link.href.split('/').pop();
+                    const title = fileName.replace(/\.[^/.]+$/, '').replace(/%20/g, ' ');
+                    
+                    const photoItem = document.createElement('div');
+                    photoItem.className = 'photo-item';
+                    photoItem.innerHTML = `
+                        <img src="photowall/${fileName}" alt="${title}">
+                        <div class="title">${title}</div>
+                    `;
+                    
+                    photoItem.addEventListener('click', () => openModal(fileName, title));
+                    photoGrid.appendChild(photoItem);
+                });
+            } catch (error) {
+                console.error('Error loading photos:', error);
+                photoGrid.innerHTML = `
+                    <div class="empty-message">
+                        Error loading photos.<br>
+                        Please make sure the photowall folder exists and is accessible.
+                    </div>
+                `;
+            }
+        }
+
+        // Modal functions
+        function openModal(fileName, title) {
+            const modal = document.getElementById('photoModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            modalImage.src = `photowall/${fileName}`;
+            modalTitle.textContent = title;
+            modal.style.display = 'block';
+            
+            // Play click sound
+            const clickSound = new Audio('https://www.myinstants.com/media/sounds/click.mp3');
+            clickSound.volume = 0.2;
+            clickSound.play();
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('photoModal');
+            modal.style.display = 'none';
+            
+            // Play click sound
+            const clickSound = new Audio('https://www.myinstants.com/media/sounds/click.mp3');
+            clickSound.volume = 0.2;
+            clickSound.play();
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (event) => {
+            const modal = document.getElementById('photoModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Load photos when page loads
+        document.addEventListener('DOMContentLoaded', loadPhotos);
+
+        // Add transition handler for back button
+        async function handleBackToHome() {
+            const overlay = document.querySelector('.transition-overlay');
+            const glitch = document.querySelector('.glitch');
+            const loadingText = document.querySelector('.loading-text');
+            
+            // Fade in overlay and glitch effect
+            overlay.classList.add('transition-active');
+            glitch.classList.add('transition-active');
+            loadingText.classList.add('active');
+            
+            // Play glitch sound
+            const glitchSound = new Audio('https://www.myinstants.com/media/sounds/glitch-sound-effect.mp3');
+            glitchSound.volume = 0.2;
+            glitchSound.play();
+            
+            // Wait for transition animation
+            await new Promise(resolve => setTimeout(resolve, 800));
+            
+            // Navigate to home page
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html> 
