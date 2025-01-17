@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://unpkg.com/98.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
         body {
             font-family: "MS Sans Serif", Arial, sans-serif;
@@ -164,7 +165,15 @@
     </div>
 
     <script>
-        function addSignature() {
+        // Initialize Supabase client correctly
+        const { createClient } = supabase;
+        const supabaseClient = createClient(
+            'https://sxahfvyjmnbzdqhehhej.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4YWhmdnlqbW5iemRxaGVoaGVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzcwNzkyMTAsImV4cCI6MjA1MjY1NTIxMH0.17sw97Ql1rUtK_PRAOs8RK6WVvNftIUg2dBwg1QY-6g'
+        );
+
+        // Function to add signature
+        async function addSignature() {
             const name = document.getElementById('name').value.trim();
             const message = document.getElementById('message').value.trim();
             
@@ -173,40 +182,99 @@
                 return;
             }
 
-            const board = document.getElementById('signatureBoard');
-            const date = new Date().toLocaleDateString();
-            
-            const signature = document.createElement('div');
-            signature.className = 'signature';
-            signature.innerHTML = `
-                <div>${message}</div>
-                <div class="signature-meta">- ${name} | ${date}</div>
-            `;
+            try {
+                // Insert signature into Supabase
+                const { data, error } = await supabaseClient
+                    .from('signatures')
+                    .insert([
+                        {
+                            name: name,
+                            message: message,
+                            created_at: new Date().toISOString()
+                        }
+                    ]);
 
-            board.insertBefore(signature, board.firstChild);
-            
-            // Clear form
-            document.getElementById('name').value = '';
-            document.getElementById('message').value = '';
+                if (error) throw error;
 
-            // Save to localStorage
-            saveSignatures();
-        }
-
-        function saveSignatures() {
-            const signatures = document.getElementById('signatureBoard').innerHTML;
-            localStorage.setItem('guestbookSignatures', signatures);
-        }
-
-        function loadSignatures() {
-            const signatures = localStorage.getItem('guestbookSignatures');
-            if (signatures) {
-                document.getElementById('signatureBoard').innerHTML = signatures;
+                // Clear form
+                document.getElementById('name').value = '';
+                document.getElementById('message').value = '';
+            } catch (error) {
+                console.error("Error adding signature: ", error);
+                alert('Error saving signature. Please try again.');
             }
         }
 
-        // Load saved signatures when page loads
+        // Function to create signature element
+        function createSignatureElement(signature) {
+            const div = document.createElement('div');
+            div.className = 'signature';
+            div.setAttribute('data-key', signature.id);
+            div.innerHTML = `
+                <div>${signature.message}</div>
+                <div class="signature-meta">- ${signature.name} | ${new Date(signature.created_at).toLocaleDateString()}</div>
+            `;
+            return div;
+        }
+
+        // Function to load and display signatures
+        async function loadSignatures() {
+            const board = document.getElementById('signatureBoard');
+            
+            try {
+                // Get initial signatures
+                const { data: signatures, error } = await supabaseClient
+                    .from('signatures')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(50);
+
+                if (error) throw error;
+
+                // Clear and display signatures
+                board.innerHTML = '';
+                if (signatures) {
+                    signatures.forEach(signature => {
+                        const sigElement = createSignatureElement(signature);
+                        board.appendChild(sigElement);
+                    });
+                }
+
+                // Subscribe to realtime changes
+                const channel = supabaseClient
+                    .channel('public:signatures')
+                    .on('postgres_changes', 
+                        { 
+                            event: 'INSERT', 
+                            schema: 'public', 
+                            table: 'signatures' 
+                        }, 
+                        payload => {
+                            const sigElement = createSignatureElement(payload.new);
+                            board.insertBefore(sigElement, board.firstChild);
+                        }
+                    )
+                    .subscribe();
+
+            } catch (error) {
+                console.error("Error loading signatures: ", error);
+            }
+        }
+
+        // Load signatures when page loads
         document.addEventListener('DOMContentLoaded', loadSignatures);
+
+        // Add sound effects for the Windows 98 feel
+        function playClickSound() {
+            const audio = new Audio('https://www.myinstants.com/media/sounds/click.mp3');
+            audio.volume = 0.2;
+            audio.play();
+        }
+
+        // Add click sound to buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', playClickSound);
+        });
     </script>
 </body>
 </html> 
