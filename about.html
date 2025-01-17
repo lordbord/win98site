@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://unpkg.com/98.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="transitions.css">
     <style>
         body {
             background: linear-gradient(45deg, #ff00ff, #00ffff);
@@ -162,10 +163,48 @@
                 </div>
 
                 <div class="back-button">
-                    <button onclick="window.location.href='index.html'">← Return to Homepage</button>
+                    <button onclick="handleBackToHome()">← Return to Homepage</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <script src="transitions.js"></script>
+    <script>
+        // Add transition handler for back button
+        async function handleBackToHome() {
+            const overlay = document.querySelector('.transition-overlay');
+            const glitch = document.querySelector('.glitch');
+            const loadingText = document.querySelector('.loading-text');
+            
+            // Fade in overlay and glitch effect
+            overlay.classList.add('transition-active');
+            glitch.classList.add('transition-active');
+            loadingText.classList.add('active');
+            
+            // Play glitch sound
+            const glitchSound = new Audio('https://www.myinstants.com/media/sounds/glitch-sound-effect.mp3');
+            glitchSound.volume = 0.2;
+            glitchSound.play();
+            
+            // Wait for transition animation
+            await new Promise(resolve => setTimeout(resolve, 800));
+            
+            // Navigate to home page
+            window.location.href = 'index.html';
+        }
+
+        // Add sound effects for the Windows 98 feel
+        function playClickSound() {
+            const audio = new Audio('https://www.myinstants.com/media/sounds/click.mp3');
+            audio.volume = 0.2;
+            audio.play();
+        }
+
+        // Add click sound to buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', playClickSound);
+        });
+    </script>
 </body>
 </html> 

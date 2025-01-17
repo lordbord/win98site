@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://unpkg.com/98.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="transitions.css">
     <style>
         body {
             font-family: "MS Sans Serif", Arial, sans-serif;
@@ -184,12 +185,13 @@
             </div>
             <div class="window-body">
                 <nav>
-                    <button onclick="window.location.href='index.html'">← Back to Home</button>
+                    <button onclick="handleBackToHome()">← Back to Home</button>
                 </nav>
             </div>
         </div>
     </div>
 
+    <script src="transitions.js"></script>
     <script>
         class MusicPlayer {
             constructor() {
@@ -302,6 +304,29 @@
         document.addEventListener('DOMContentLoaded', () => {
             const player = new MusicPlayer();
         });
+
+        // Add transition handler for back button
+        async function handleBackToHome() {
+            const overlay = document.querySelector('.transition-overlay');
+            const glitch = document.querySelector('.glitch');
+            const loadingText = document.querySelector('.loading-text');
+            
+            // Fade in overlay and glitch effect
+            overlay.classList.add('transition-active');
+            glitch.classList.add('transition-active');
+            loadingText.classList.add('active');
+            
+            // Play glitch sound
+            const glitchSound = new Audio('https://www.myinstants.com/media/sounds/glitch-sound-effect.mp3');
+            glitchSound.volume = 0.2;
+            glitchSound.play();
+            
+            // Wait for transition animation
+            await new Promise(resolve => setTimeout(resolve, 800));
+            
+            // Navigate to home page
+            window.location.href = 'index.html';
+        }
     </script>
 </body>
 </html> 

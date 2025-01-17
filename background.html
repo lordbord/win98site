@@ -9,6 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="transitions.css">
     <style>
         body {
             margin: 0;
@@ -77,12 +78,13 @@
                     <button id="toggleRotation">Pause Void</button>
                     <button id="zoomIn">Zoom In</button>
                     <button id="zoomOut">Zoom Out</button>
-                    <button onclick="window.location.href='index.html'">Exit Void</button>
+                    <button onclick="handleExitVoid()">Exit Void</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="transitions.js"></script>
     <script>
         // Initialize Supabase client
         const { createClient } = supabase;
@@ -90,6 +92,29 @@
             'https://sxahfvyjmnbzdqhehhej.supabase.co',
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4YWhmdnlqbW5iemRxaGVoaGVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzcwNzkyMTAsImV4cCI6MjA1MjY1NTIxMH0.17sw97Ql1rUtK_PRAOs8RK6WVvNftIUg2dBwg1QY-6g'
         );
+
+        // Add transition handler for exit button
+        async function handleExitVoid() {
+            const overlay = document.querySelector('.transition-overlay');
+            const glitch = document.querySelector('.glitch');
+            const loadingText = document.querySelector('.loading-text');
+            
+            // Fade in overlay and glitch effect
+            overlay.classList.add('transition-active');
+            glitch.classList.add('transition-active');
+            loadingText.classList.add('active');
+            
+            // Play glitch sound
+            const glitchSound = new Audio('https://www.myinstants.com/media/sounds/glitch-sound-effect.mp3');
+            glitchSound.volume = 0.2;
+            glitchSound.play();
+            
+            // Wait for transition animation
+            await new Promise(resolve => setTimeout(resolve, 800));
+            
+            // Navigate to home page
+            window.location.href = 'index.html';
+        }
 
         // Debug function
         function debug(msg) {
