@@ -1,47 +1,255 @@
-.web-player {
+/* Grid background */
+.grid-background {
     position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 1000;
-    width: 300px;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background: linear-gradient(45deg, #ff00ff, #00ffff);
+    perspective: 1000px;
+    overflow: hidden;
 }
 
-.player-window {
-    background: rgba(195, 199, 203, 0.85);
+.grid {
+    position: absolute;
+    width: 400%;
+    height: 400%;
+    top: -150%;
+    left: -150%;
+    background-image: 
+        linear-gradient(rgba(255, 0, 255, 0.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 0, 255, 0.5) 1px, transparent 1px);
+    background-size: 50px 50px;
+    transform: rotateX(60deg);
+    animation: gridMove 20s linear infinite;
+    transform-origin: center center;
+}
+
+@keyframes gridMove {
+    0% {
+        transform: rotateX(60deg) translateY(0);
+    }
+    100% {
+        transform: rotateX(60deg) translateY(50px);
+    }
+}
+
+/* Base styles */
+body {
+    font-family: "MS Sans Serif", Arial, sans-serif;
+    margin: 0;
+    padding: 10px;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: transparent;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 10px 50px 10px;
+}
+
+/* Windows */
+.window {
     backdrop-filter: blur(5px);
+    margin-bottom: 20px;
+    background: rgba(195, 199, 203, 0.85);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
-.player-controls {
+/* Floating icons */
+.floating-icon {
+    position: fixed;
+    z-index: -1;
+    width: 32px;
+    height: 32px;
+    pointer-events: none;
+    opacity: 0.7;
+    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
+}
+
+/* Menu items */
+.menu-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px;
+    gap: 8px;
+    padding: 8px;
+    cursor: pointer;
+    color: black;
+    text-decoration: none;
 }
 
+.menu-item:hover {
+    background: #000080;
+    color: white;
+}
+
+.menu-item img {
+    width: 24px;
+    height: 24px;
+}
+
+/* Construction text */
+.construction-text {
+    background: black;
+    color: yellow;
+    padding: 10px;
+    margin: 10px 0;
+    font-family: "Press Start 2P", monospace;
+    text-align: center;
+    letter-spacing: 0.5em;
+    animation: blink-construction 1s step-end infinite;
+}
+
+@keyframes blink-construction {
+    50% { color: red; }
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+    .construction-text {
+        font-size: 0.8em;
+        letter-spacing: 0.2em;
+        padding: 8px;
+        white-space: normal;
+        word-wrap: break-word;
+    }
+
+    .volume-control {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    #volumeSlider {
+        width: 60px;
+    }
+    
+    #muteButton {
+        font-size: 0.7em;
+        padding: 2px;
+    }
+}
+
+/* Sound controls */
 .volume-control {
     display: flex;
     align-items: center;
     gap: 5px;
 }
 
-.volume-control input {
-    width: 80px;
+#muteButton {
+    font-family: 'Press Start 2P', monospace;
+    background: transparent;
+    color: #ff00ff;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
 }
 
-.track-info {
-    padding: 5px 10px;
-    font-family: "MS Sans Serif", Arial, sans-serif;
-    font-size: 0.9em;
-    white-space: nowrap;
+/* Utility classes */
+.text-center {
+    text-align: center;
+}
+
+.pixel-font {
+    font-family: 'Press Start 2P', monospace;
+}
+
+.neon-text {
+    color: #ff00ff;
+    text-shadow: 2px 2px #00ffff;
+}
+
+/* Add these marquee styles */
+.marquee-container {
+    background: black;
     overflow: hidden;
-    text-overflow: ellipsis;
+    margin: 10px 0;
 }
 
-/* Global cursor styles */
-body {
-    cursor: url('https://cur.cursors-4u.net/cursors/cur-2/cur117.cur'), auto !important;
+.marquee {
+    color: #ff00ff;
+    white-space: nowrap;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1em;
+    padding: 10px 0;
 }
 
-button, a, [role="button"], .title-bar-controls button {
-    cursor: url('https://cur.cursors-4u.net/cursors/cur-2/cur116.cur'), pointer !important;
+.marquee span {
+    display: inline-block;
+    padding-left: 100%;
+    animation: marquee 45s linear infinite;
+}
+
+@keyframes marquee {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(-100%, 0); }
+}
+
+/* Mobile adjustments for marquee */
+@media (max-width: 768px) {
+    .marquee {
+        font-size: 0.8em;
+        padding: 8px 0;
+    }
+    
+    .marquee span {
+        animation: marquee 35s linear infinite;
+    }
+}
+
+/* Add these new styles for vaporwave navigation */
+.vaporwave-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.vaporwave-nav .menu-item {
+    padding: 8px;
+    border: 2px solid;
+    border-color: #fff #424242 #424242 #fff;
+    transition: all 0.3s ease;
+    background: rgba(195, 199, 203, 0.9);
+}
+
+.vaporwave-nav .menu-item:hover {
+    background: #000080;
+    color: #ff00ff;
+    text-shadow: 2px 2px #00ffff;
+    border-color: #424242 #fff #fff #424242;
+    transform: translateX(2px);
+}
+
+.vaporwave-nav .menu-item img {
+    width: 24px;
+    height: 24px;
+    filter: drop-shadow(1px 1px 0px #00ffff);
+}
+
+.vaporwave-nav .nav-text {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.8em;
+}
+
+/* Mobile adjustments for navigation */
+@media (max-width: 768px) {
+    .vaporwave-nav .nav-text {
+        font-size: 0.7em;
+    }
+    
+    .vaporwave-nav .menu-item {
+        padding: 6px;
+    }
+    
+    .vaporwave-nav .menu-item img {
+        width: 20px;
+        height: 20px;
+    }
 } 

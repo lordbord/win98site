@@ -31,12 +31,14 @@
             display: flex;
             gap: 10px;
             padding: 10px;
+            flex-wrap: wrap;
         }
 
         button {
             font-family: 'Press Start 2P', monospace;
             font-size: 0.8em;
             transition: transform 0.2s;
+            min-width: 80px;
         }
 
         button:hover {
@@ -48,8 +50,12 @@
             top: 10px;
             left: 10px;
             color: #ff00ff;
-            font-family: monospace;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.8em;
             z-index: 1000;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px;
+            border-radius: 3px;
         }
     </style>
 </head>
@@ -68,6 +74,8 @@
             <div class="window-body">
                 <div class="control-buttons">
                     <button id="toggleRotation">Pause Void</button>
+                    <button id="zoomIn">Zoom In</button>
+                    <button id="zoomOut">Zoom Out</button>
                     <button onclick="window.location.href='index.html'">Exit Void</button>
                 </div>
             </div>
@@ -130,17 +138,6 @@
         // Create geometric shapes
         const shapes = new THREE.Group();
         
-        // Torus
-        const torusGeometry = new THREE.TorusGeometry(10, 1, 16, 100);
-        const torusMaterial = new THREE.MeshPhongMaterial({
-            color: 0xff00ff,
-            wireframe: true,
-            emissive: 0xff00ff,
-            emissiveIntensity: 0.2
-        });
-        const torus = new THREE.Mesh(torusGeometry, torusMaterial);
-        shapes.add(torus);
-
         // Icosahedron
         const icoGeometry = new THREE.IcosahedronGeometry(5, 0);
         const icoMaterial = new THREE.MeshPhongMaterial({
@@ -249,6 +246,41 @@
         camera.position.y = 10;
         camera.lookAt(0, 0, 0);
 
+        // Add zoom controls
+        const minZoom = 10;
+        const maxZoom = 100;
+        const zoomSpeed = 2;
+        
+        // Zoom with mouse wheel
+        window.addEventListener('wheel', (event) => {
+            event.preventDefault();
+            
+            const zoomAmount = event.deltaY * 0.01;
+            const newZoom = camera.position.z + zoomAmount * zoomSpeed;
+            
+            if (newZoom >= minZoom && newZoom <= maxZoom) {
+                camera.position.z = newZoom;
+            }
+        }, { passive: false });
+
+        // Zoom with buttons
+        const zoomInBtn = document.getElementById('zoomIn');
+        const zoomOutBtn = document.getElementById('zoomOut');
+
+        zoomInBtn.addEventListener('click', () => {
+            const newZoom = camera.position.z - zoomSpeed;
+            if (newZoom >= minZoom) {
+                camera.position.z = newZoom;
+            }
+        });
+
+        zoomOutBtn.addEventListener('click', () => {
+            const newZoom = camera.position.z + zoomSpeed;
+            if (newZoom <= maxZoom) {
+                camera.position.z = newZoom;
+            }
+        });
+
         // Animation controls
         let isRotating = true;
         const toggleBtn = document.getElementById('toggleRotation');
@@ -275,9 +307,7 @@
                 }
                 particleSystem.geometry.attributes.position.needsUpdate = true;
 
-                // Animate shapes
-                torus.rotation.x += 0.01;
-                torus.rotation.y += 0.01;
+                // Remove torus animation and keep only icosahedron and octahedron animations
                 icosahedron.rotation.x -= 0.005;
                 icosahedron.rotation.z += 0.005;
                 octahedron.rotation.y += 0.02;

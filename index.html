@@ -5,238 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>☆彡 LORD JORD'S DOMAIN 彡☆</title>
     <link rel="stylesheet" href="https://unpkg.com/98.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Grid background */
-        .grid-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(45deg, #ff00ff, #00ffff);
-            perspective: 1000px;
-            overflow: hidden;
-        }
-
-        .grid {
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            bottom: -50%;
-            left: -50%;
-            background-image: 
-                linear-gradient(rgba(255, 0, 255, 0.5) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 0, 255, 0.5) 1px, transparent 1px);
-            background-size: 50px 50px;
-            transform: rotateX(60deg);
-            animation: gridMove 20s linear infinite;
-        }
-
-        @keyframes gridMove {
-            0% {
-                transform: rotateX(60deg) translateY(0);
-            }
-            100% {
-                transform: rotateX(60deg) translateY(50px);
-            }
-        }
-
-        body {
-            font-family: "MS Sans Serif", Arial, sans-serif;
-            margin: 0;
-            padding: 10px;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 10px;
-        }
-
-        .window {
-            backdrop-filter: blur(5px);
-            margin-bottom: 20px;
-            background: rgba(195, 199, 203, 0.85);
-            animation: float 6s ease-in-out infinite;
-            width: 100%;
-            max-width: 100%;
-            box-sizing: border-box;
-        }
-
-        /* Mobile-friendly navigation */
-        nav {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 10px;
-            padding: 10px;
-        }
-
-        nav button {
-            width: 100%;
-            white-space: nowrap;
-            padding: 8px;
-            font-size: 0.9em;
-        }
-
-        /* Adjust marquee for mobile */
-        .marquee {
-            background: black;
-            color: #ff00ff;
-            padding: 10px;
-            white-space: nowrap;
-            overflow: hidden;
-            font-size: 1.2em;
-            text-align: center;
-        }
-
-        .marquee span {
-            display: inline-block;
-            animation: marquee 45s linear infinite;
-            padding-left: 100%;
-        }
-
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-200%); }
-        }
-
-        /* Mobile adjustments for marquee */
-        @media (max-width: 768px) {
-            .marquee {
-                font-size: 0.9em;
-                padding: 8px;
-            }
-            
-            .marquee span {
-                animation: marquee 35s linear infinite;
-            }
-        }
-
-        /* Adjust title text size for mobile */
-        @media (max-width: 768px) {
-            .title-bar-text {
-                font-size: 0.9em;
-            }
-
-            /* Make Lord Jord text responsive */
-            a[href="about.html"] span {
-                font-size: 1.5em !important;
-            }
-
-            .construction-text {
-                font-size: 0.8em;
-                letter-spacing: 0.2em;
-            }
-
-            /* Adjust welcome text for mobile */
-            .guestbook p {
-                font-size: 0.7em !important;
-            }
-
-            /* Adjust status text for mobile */
-            .window-body p {
-                font-size: 0.9em;
-            }
-
-            /* Make mute button smaller on mobile */
-            #muteButton {
-                padding: 4px !important;
-                font-size: 0.7em !important;
-                top: 10px !important;
-                right: 10px !important;
-            }
-        }
-
-        /* Make buttons more touch-friendly */
-        button {
-            min-height: 44px;
-            padding: 8px 16px;
-        }
-
-        /* Adjust counter for mobile */
-        .counter {
-            font-size: 0.9em;
-            padding: 8px;
-            margin: 10px 0;
-        }
-
-        /* Ensure proper spacing in guestbook */
-        .guestbook {
-            padding: 15px;
-            margin: 10px 0;
-        }
-
-        /* Improve readability of status section */
-        .window-body[style*="padding: 10px;"] p {
-            margin: 8px 0;
-            line-height: 1.4;
-        }
-
-        /* Add smooth scrolling */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Prevent horizontal overflow */
-        * {
-            max-width: 100%;
-        }
-
-        .construction-text {
-            background: black;
-            color: yellow;
-            padding: 10px;
-            margin: 10px 0;
-            font-family: "Press Start 2P", monospace;
-            text-align: center;
-            letter-spacing: 0.5em;
-            animation: blink-construction 1s step-end infinite;
-        }
-
-        @keyframes blink-construction {
-            50% { color: red; }
-        }
-
-        /* Mobile adjustments for construction text */
-        @media (max-width: 768px) {
-            .construction-text {
-                font-size: 0.8em;
-                letter-spacing: 0.2em;
-                padding: 8px;
-                white-space: normal;
-                word-wrap: break-word;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .volume-control {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            #volumeSlider {
-                width: 60px;
-            }
-            
-            #muteButton {
-                font-size: 0.7em;
-                padding: 2px;
-            }
-        }
-    </style>
 </head>
 <body>
     <div class="grid-background">
         <div class="grid"></div>
     </div>
+    
+    <!-- Add this new div for icons container -->
+    <div id="floating-icons-container"></div>
+    
     <div class="container">
         <div style="position: fixed; top: 20px; right: 20px; z-index: 1000; 
                     background: rgba(0,0,0,0.7); backdrop-filter: blur(5px);
@@ -264,13 +43,15 @@
                 </div>
             </div>
             <div class="window-body">
-                <div class="marquee">
-                    <span>
-                        ✧･ﾟ: *✧･ﾟ:* W E L C O M E · T O · M Y · C O R N E R · O F · T H E · I N T E R N E T *:･ﾟ✧*:･ﾟ✧ · · · 
-                        L O A D I N G · V A P O R W A V E · A E S T H E T I C S · · · 
-                        E N T E R I N G · T H E · D I G I T A L · V O I D · · · 
-                        P R E S S · A N Y · K E Y · T O · C O N T I N U E · · ·
-                    </span>
+                <div class="marquee-container">
+                    <div class="marquee">
+                        <span>
+                            ✧･ﾟ: *✧･ﾟ:* W E L C O M E · T O · M Y · C O R N E R · O F · T H E · I N T E R N E T *:･ﾟ✧*:･ﾟ✧ · · · 
+                            L O A D I N G · V A P O R W A V E · A E S T H E T I C S · · · 
+                            E N T E R I N G · T H E · D I G I T A L · V O I D · · · 
+                            P R E S S · A N Y · K E Y · T O · C O N T I N U E · · ·
+                        </span>
+                    </div>
                 </div>
                 
                 <div class="construction-text">
@@ -309,22 +90,6 @@
 
         <div class="window">
             <div class="title-bar">
-                <div class="title-bar-text">Navigation</div>
-            </div>
-            <div class="window-body">
-                <nav>
-                    <button onclick="window.location.href='about.html'">👤 About Me</button>
-                    <button onclick="window.location.href='music.html'">�� My Music</button>
-                    <button onclick="window.location.href='signatures.html'">📖 Sign Guestbook</button>
-                    <button onclick="window.location.href='#'">💻 Computer Stuff</button>
-                    <button onclick="window.location.href='#'">🎨 Art Gallery</button>
-                    <button onclick="window.location.href='background.html'">🌌 Enter The Void</button>
-                </nav>
-            </div>
-        </div>
-
-        <div class="window">
-            <div class="title-bar">
                 <div class="title-bar-text">Current Status</div>
             </div>
             <div class="window-body" style="padding: 10px;">
@@ -332,6 +97,46 @@
                 <p>🛠️ Working on: Random Projects</p>
                 <p>🎮 Playing: Tetris & VR Games</p>
                 <p>💭 Status: Trying to make something good of these strange hi-tech times</p>
+            </div>
+        </div>
+
+        <!-- Add new navigation window -->
+        <div class="window">
+            <div class="title-bar">
+                <div class="title-bar-text">Navigation.exe</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Minimize"></button>
+                    <button aria-label="Maximize"></button>
+                    <button aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="window-body" style="padding: 10px;">
+                <nav class="vaporwave-nav">
+                    <a href="about.html" class="menu-item">
+                        <img src="https://win98icons.alexmeub.com/icons/png/user_computer-0.png" alt="About">
+                        <span class="nav-text">About Me</span>
+                    </a>
+                    <a href="music.html" class="menu-item">
+                        <img src="https://win98icons.alexmeub.com/icons/png/multimedia-5.png" alt="Music">
+                        <span class="nav-text">My Music</span>
+                    </a>
+                    <a href="signatures.html" class="menu-item">
+                        <img src="https://win98icons.alexmeub.com/icons/png/notepad-2.png" alt="Guestbook">
+                        <span class="nav-text">Sign Guestbook</span>
+                    </a>
+                    <a href="#" class="menu-item">
+                        <img src="https://win98icons.alexmeub.com/icons/png/computer_explorer-4.png" alt="Computer">
+                        <span class="nav-text">Computer Stuff</span>
+                    </a>
+                    <a href="#" class="menu-item">
+                        <img src="https://win98icons.alexmeub.com/icons/png/paint_file-0.png" alt="Art">
+                        <span class="nav-text">Art Gallery</span>
+                    </a>
+                    <a href="background.html" class="menu-item">
+                        <img src="https://win98icons.alexmeub.com/icons/png/world-2.png" alt="Void">
+                        <span class="nav-text">Enter The Void</span>
+                    </a>
+                </nav>
             </div>
         </div>
     </div>
@@ -436,6 +241,77 @@
         // Make sounds quieter than the music
         clickSound.volume = 0.3;
         hoverSound.volume = 0.2;
+
+        // Add this new JavaScript for floating icons
+        const iconPaths = [
+            'https://win98icons.alexmeub.com/icons/png/computer-4.png',
+            'https://win98icons.alexmeub.com/icons/png/directory_closed-4.png',
+            'https://win98icons.alexmeub.com/icons/png/notepad-3.png',
+            'https://win98icons.alexmeub.com/icons/png/recycle_bin_empty-4.png',
+            'https://win98icons.alexmeub.com/icons/png/msie1-4.png',
+            'https://win98icons.alexmeub.com/icons/png/console_prompt-0.png'
+        ];
+
+        function createFloatingIcon() {
+            const icon = document.createElement('img');
+            icon.className = 'floating-icon';
+            icon.src = iconPaths[Math.floor(Math.random() * iconPaths.length)];
+            
+            // Random starting position
+            const startX = Math.random() * window.innerWidth;
+            const startY = Math.random() * window.innerHeight;
+            
+            icon.style.left = `${startX}px`;
+            icon.style.top = `${startY}px`;
+            
+            document.getElementById('floating-icons-container').appendChild(icon);
+            
+            // Move across screen
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 0.5 + Math.random() * 1;
+            
+            let posX = startX;
+            let posY = startY;
+            
+            function moveIcon() {
+                posX += Math.cos(angle) * speed;
+                posY += Math.sin(angle) * speed;
+                
+                icon.style.left = `${posX}px`;
+                icon.style.top = `${posY}px`;
+                
+                // Remove and recreate icon when it goes off screen
+                if (posX < -50 || posX > window.innerWidth + 50 || 
+                    posY < -50 || posY > window.innerHeight + 50) {
+                    icon.remove();
+                    createFloatingIcon();
+                } else {
+                    requestAnimationFrame(moveIcon);
+                }
+            }
+            
+            moveIcon();
+        }
+
+        // Create initial set of icons
+        for (let i = 0; i < 10; i++) {
+            createFloatingIcon();
+        }
+
+        // Add this new JavaScript for start menu functionality
+        const startButton = document.getElementById('startButton');
+        const startMenu = document.getElementById('startMenu');
+
+        startButton.addEventListener('click', () => {
+            startMenu.classList.toggle('active');
+        });
+
+        // Close start menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!startButton.contains(e.target) && !startMenu.contains(e.target)) {
+                startMenu.classList.remove('active');
+            }
+        });
     </script>
 </body>
 </html> 
