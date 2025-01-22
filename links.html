@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☆彡 FUN LINKS 彡☆</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="transitions.css">
+    <style>
+        body {
+            font-family: "MS Sans Serif", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            perspective: 1000px;
+            overflow: hidden;
+        }
+
+        .grid {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            bottom: -50%;
+            left: -50%;
+            background-image: 
+                linear-gradient(rgba(255, 0, 255, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 255, 0.5) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: rotateX(60deg);
+            animation: gridMove 20s linear infinite;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .window {
+            backdrop-filter: blur(5px);
+            margin-bottom: 20px;
+            background: rgba(195, 199, 203, 0.85);
+        }
+
+        .links-section {
+            padding: 16px;
+        }
+
+        .link-category {
+            margin-bottom: 20px;
+        }
+
+        .link-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .link-item {
+            display: flex;
+            flex-direction: column;
+            padding: 8px;
+            margin: 4px 0;
+            background: white;
+            border: 2px solid;
+            border-color: #dfdfdf #808080 #808080 #dfdfdf;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .link-item:hover {
+            background: #000080;
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .link-item .title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.8em;
+            margin-bottom: 4px;
+        }
+
+        .link-item .description {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .link-item:hover .description {
+            color: #ccc;
+        }
+
+        .category-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.9em;
+            color: #000080;
+            margin-bottom: 10px;
+            padding: 5px;
+            border-bottom: 2px solid #000080;
+        }
+
+        .blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background">
+        <div class="grid"></div>
+    </div>
+    <div class="container">
+        <div class="window">
+            <div class="title-bar">
+                <div class="title-bar-text">✧ Fun Links.exe ✧</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Minimize"></button>
+                    <button aria-label="Maximize"></button>
+                    <button aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="window-body">
+                <div class="links-section">
+                    <div class="link-list">
+                        <a href="https://radio.cock.institute/" target="_blank" class="link-item">
+                            <div class="title">Cock Radio</div>
+                            <div class="description">24/7 vaporwave radio station</div>
+                        </a>
+                        <a href="https://haxorspace.netlify.app/" target="_blank" class="link-item">
+                            <div class="title">L0RD J0RD'S H4X0R SP4C3</div>
+                            <div class="description">Elite haxor zone with vaporwave vibes</div>
+                        </a>
+                        <a href="https://musicforprogramming.net/" target="_blank" class="link-item">
+                            <div class="title">Music for Programming</div>
+                            <div class="description">Focus-enhancing sounds</div>
+                        </a>
+                        <a href="https://neocities.org/" target="_blank" class="link-item">
+                            <div class="title">Neocities</div>
+                            <div class="description">The modern Geocities</div>
+                        </a>
+                        <a href="https://poolsuite.net/" target="_blank" class="link-item">
+                            <div class="title">Poolsuite FM</div>
+                            <div class="description">Retro summer radio vibes</div>
+                        </a>
+                        <a href="https://tetr.io/" target="_blank" class="link-item">
+                            <div class="title">TETR.IO</div>
+                            <div class="description">Modern Tetris with multiplayer and more!</div>
+                        </a>
+                        <a href="https://windows93.net/" target="_blank" class="link-item">
+                            <div class="title">Windows93</div>
+                            <div class="description">A weird and wonderful web OS</div>
+                        </a>
+                        <a href="https://dustinbrett.com/" target="_blank" class="link-item">
+                            <div class="title">Windows 10 in React</div>
+                            <div class="description">Windows 10 recreated in the browser</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="window">
+            <div class="title-bar">
+                <div class="title-bar-text">Navigation</div>
+            </div>
+            <div class="window-body">
+                <nav>
+                    <button onclick="handleBackToHome()">← Back to Home</button>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script src="transitions.js"></script>
+    <script>
+        // Add transition handler for back button
+        async function handleBackToHome() {
+            const overlay = document.querySelector('.transition-overlay');
+            const glitch = document.querySelector('.glitch');
+            const loadingText = document.querySelector('.loading-text');
+            
+            // Fade in overlay and glitch effect
+            overlay.classList.add('transition-active');
+            glitch.classList.add('transition-active');
+            loadingText.classList.add('active');
+            
+            // Play glitch sound
+            const glitchSound = new Audio('https://www.myinstants.com/media/sounds/glitch-sound-effect.mp3');
+            glitchSound.volume = 0.2;
+            glitchSound.play();
+            
+            // Wait for transition animation
+            await new Promise(resolve => setTimeout(resolve, 800));
+            
+            // Navigate to home page
+            window.location.href = 'index.html';
+        }
+
+        // Add hover sound effects
+        document.querySelectorAll('.link-item').forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                const hoverSound = new Audio('https://www.myinstants.com/media/sounds/hover.mp3');
+                hoverSound.volume = 0.1;
+                hoverSound.play();
+            });
+            
+            link.addEventListener('click', () => {
+                const clickSound = new Audio('https://www.myinstants.com/media/sounds/click.mp3');
+                clickSound.volume = 0.2;
+                clickSound.play();
+            });
+        });
+    </script>
+</body>
+</html> 
