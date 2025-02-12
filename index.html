@@ -18,22 +18,6 @@
     <div id="floating-icons-container"></div>
     
     <div class="container">
-        <div style="position: fixed; top: 20px; right: 20px; z-index: 1000; 
-                    background: rgba(0,0,0,0.7); backdrop-filter: blur(5px);
-                    padding: 10px; border-radius: 4px; display: flex; 
-                    align-items: center; gap: 10px;">
-            <button id="muteButton" 
-                    style="font-family: 'Press Start 2P', monospace; 
-                           background: transparent; color: #ff00ff; border: none; 
-                           cursor: pointer; padding: 4px;">
-                🔊 SOUND ON
-            </button>
-            <div class="volume-control" style="display: flex; align-items: center; gap: 5px;">
-                <span style="color: #ff00ff; font-family: 'Press Start 2P', monospace; font-size: 0.8em;">VOL</span>
-                <input type="range" id="volumeSlider" min="0" max="100" value="50"
-                       style="width: 80px; accent-color: #ff00ff;">
-            </div>
-        </div>
         <div class="window">
             <div class="title-bar">
                 <div class="title-bar-text">☆彡 Welcome to Lord Jord's Domain 彡☆</div>
@@ -91,6 +75,11 @@
         <div class="window">
             <div class="title-bar">
                 <div class="title-bar-text">Current Status</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Minimize"></button>
+                    <button aria-label="Maximize"></button>
+                    <button aria-label="Close"></button>
+                </div>
             </div>
             <div class="window-body" style="padding: 10px;">
                 <p>🎓 Studying Computer Science</p>
@@ -100,7 +89,6 @@
             </div>
         </div>
 
-        <!-- Add new navigation window -->
         <div class="window">
             <div class="title-bar">
                 <div class="title-bar-text">Navigation.exe</div>
@@ -141,9 +129,6 @@
         </div>
     </div>
 
-    <audio id="bgMusic" loop>
-        <source src="music/Snow%20Strippers%20Ahh%20Beat.mp3" type="audio/mp3">
-    </audio>
     <!-- Sound effects -->
     <audio id="clickSound" preload="auto">
         <source src="https://www.myinstants.com/media/sounds/click.mp3" type="audio/mp3">
@@ -189,39 +174,6 @@
         // Call the function when page loads
         updateVisitorCount();
 
-        // Keep audio controls
-        const bgMusic = document.getElementById('bgMusic');
-        
-        // Add volume control
-        const volumeSlider = document.getElementById('volumeSlider');
-        
-        volumeSlider.addEventListener('input', (e) => {
-            const volume = e.target.value / 100;
-            bgMusic.volume = volume;
-            clickSound.volume = volume * 0.3;  // Keep click sound relatively quieter
-            hoverSound.volume = volume * 0.2;  // Keep hover sound relatively quieter
-        });
-
-        // Update the DOMContentLoaded event
-        document.addEventListener('DOMContentLoaded', () => {
-            bgMusic.volume = volumeSlider.value / 100;
-            bgMusic.play().catch(() => {
-                console.log('Autoplay prevented. Click sound button to start music.');
-            });
-        });
-        
-        const muteButton = document.getElementById('muteButton');
-        
-        muteButton.addEventListener('click', () => {
-            if (bgMusic.paused) {
-                bgMusic.play();
-                muteButton.textContent = '🔊 SOUND ON';
-            } else {
-                bgMusic.pause();
-                muteButton.textContent = '🔈 SOUND OFF';
-            }
-        });
-
         // Sound Effects Setup
         const clickSound = document.getElementById('clickSound');
         const hoverSound = document.getElementById('hoverSound');
@@ -239,11 +191,11 @@
             });
         });
 
-        // Make sounds quieter than the music
+        // Make sounds quieter
         clickSound.volume = 0.3;
         hoverSound.volume = 0.2;
 
-        // Add this new JavaScript for floating icons
+        // Floating icons setup
         const iconPaths = [
             'https://win98icons.alexmeub.com/icons/png/computer-4.png',
             'https://win98icons.alexmeub.com/icons/png/directory_closed-4.png',
@@ -299,20 +251,22 @@
             createFloatingIcon();
         }
 
-        // Add this new JavaScript for start menu functionality
+        // Add start menu functionality
         const startButton = document.getElementById('startButton');
         const startMenu = document.getElementById('startMenu');
 
-        startButton.addEventListener('click', () => {
-            startMenu.classList.toggle('active');
-        });
+        if (startButton && startMenu) {
+            startButton.addEventListener('click', () => {
+                startMenu.classList.toggle('active');
+            });
 
-        // Close start menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!startButton.contains(e.target) && !startMenu.contains(e.target)) {
-                startMenu.classList.remove('active');
-            }
-        });
+            // Close start menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!startButton.contains(e.target) && !startMenu.contains(e.target)) {
+                    startMenu.classList.remove('active');
+                }
+            });
+        }
     </script>
 </body>
 </html> 

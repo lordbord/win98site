@@ -173,7 +173,14 @@
             </div>
             <div class="window-body">
                 <div id="photoGrid" class="photo-grid">
-                    <!-- Photos will be loaded here -->
+                    <div class="empty-message">
+                        To add photos to your wall:
+                        <ol style="text-align: left; margin-top: 10px;">
+                            <li>Create a folder named 'photowall' in your repository</li>
+                            <li>Add your .jpg, .png, or .gif images to that folder</li>
+                            <li>Update the photos array in the JavaScript below with your image filenames</li>
+                        </ol>
+                    </div>
                 </div>
             </div>
         </div>
@@ -203,64 +210,57 @@
 
     <script src="transitions.js"></script>
     <script>
-        // Function to load photos from the photowall folder
-        async function loadPhotos() {
+        // Define your photos here
+        const photos = [
+            { filename: 'zerosmilewave.png', title: 'Zero Smile Wave' },
+            { filename: 'hinardo.png', title: 'Hinardo' },
+            { filename: 'VRChat_2024-12-29_22-15-21.296_3840x2160.png', title: 'VRChat Dec 29' },
+            { filename: 'VRChat_2024-12-16_01-03-24.315_3840x2160.png', title: 'VRChat Dec 16 Night' },
+            { filename: 'VRChat_2024-12-16_00-10-39.571_3840x2160.png', title: 'VRChat Dec 16 Evening' },
+            { filename: 'VRChat_2024-12-07_21-21-38.141_3840x2160.png', title: 'VRChat Dec 7' },
+            { filename: 'VRChat_2024-10-20_20-18-37.497_3840x2160.png', title: 'VRChat Oct 20' },
+            { filename: 'VRChat_2024-09-30_22-16-49.014_3840x2160.png', title: 'VRChat Sep 30' },
+            { filename: 'VRChat_2024-08-31_01-27-53.219_3840x2160.png', title: 'VRChat Aug 31 Late' },
+            { filename: 'VRChat_2024-08-31_01-20-57.889_3840x2160.png', title: 'VRChat Aug 31 Night' },
+            { filename: 'VRChat_2024-08-31_01-20-26.360_3840x2160.png', title: 'VRChat Aug 31 Evening' },
+            { filename: 'VRChat_2024-08-31_01-17-55.235_3840x2160.png', title: 'VRChat Aug 31 Early' },
+            { filename: 'VRChat_2024-08-02_22-38-10.749_3840x2160.png', title: 'VRChat Aug 2' },
+            { filename: 'VRChat_2024-07-28_02-46-36.833_3840x2160.png', title: 'VRChat Jul 28 Late' },
+            { filename: 'VRChat_2024-07-28_01-53-23.549_3840x2160.png', title: 'VRChat Jul 28 Early' }
+        ];
+
+        // Function to load photos
+        function loadPhotos() {
             const photoGrid = document.getElementById('photoGrid');
             
-            try {
-                const response = await fetch('photowall/');
-                if (!response.ok) {
-                    throw new Error('Failed to load photos');
-                }
-                
-                const html = await response.text();
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const links = Array.from(doc.querySelectorAll('a'))
-                    .filter(link => link.href.match(/\.(jpg|jpeg|png|gif)$/i));
-
-                if (links.length === 0) {
-                    photoGrid.innerHTML = `
-                        <div class="empty-message">
-                            No photos found in the photowall folder.<br>
-                            Add some .jpg, .png, or .gif files to get started!
-                        </div>
-                    `;
-                    return;
-                }
-
-                links.forEach(link => {
-                    const fileName = link.href.split('/').pop();
-                    const title = fileName.replace(/\.[^/.]+$/, '').replace(/%20/g, ' ');
-                    
-                    const photoItem = document.createElement('div');
-                    photoItem.className = 'photo-item';
-                    photoItem.innerHTML = `
-                        <img src="photowall/${fileName}" alt="${title}">
-                        <div class="title">${title}</div>
-                    `;
-                    
-                    photoItem.addEventListener('click', () => openModal(fileName, title));
-                    photoGrid.appendChild(photoItem);
-                });
-            } catch (error) {
-                console.error('Error loading photos:', error);
-                photoGrid.innerHTML = `
-                    <div class="empty-message">
-                        Error loading photos.<br>
-                        Please make sure the photowall folder exists and is accessible.
-                    </div>
-                `;
+            if (photos.length === 0) {
+                return; // Keep the instructions visible if no photos are defined
             }
+
+            // Clear the grid
+            photoGrid.innerHTML = '';
+            
+            // Add each photo
+            photos.forEach(photo => {
+                const photoItem = document.createElement('div');
+                photoItem.className = 'photo-item';
+                photoItem.innerHTML = `
+                    <img src="photowall/${photo.filename}" alt="${photo.title}">
+                    <div class="title">${photo.title}</div>
+                `;
+                
+                photoItem.addEventListener('click', () => openModal(photo.filename, photo.title));
+                photoGrid.appendChild(photoItem);
+            });
         }
 
         // Modal functions
-        function openModal(fileName, title) {
+        function openModal(filename, title) {
             const modal = document.getElementById('photoModal');
             const modalImage = document.getElementById('modalImage');
             const modalTitle = document.getElementById('modalTitle');
             
-            modalImage.src = `photowall/${fileName}`;
+            modalImage.src = `photowall/${filename}`;
             modalTitle.textContent = title;
             modal.style.display = 'block';
             
