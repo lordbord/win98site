@@ -101,6 +101,26 @@
             margin: 10px;
             font-family: 'Press Start 2P', monospace;
         }
+
+        @keyframes spaz {
+            0% { transform: rotate(-1deg) scale(1) translate(0, 0); }
+            20% { transform: rotate(3deg) scale(1.1) translate(2px, -2px); }
+            40% { transform: rotate(-2deg) scale(0.95) translate(-3px, 1px); }
+            60% { transform: rotate(2deg) scale(1.05) translate(1px, -1px); }
+            80% { transform: rotate(-3deg) scale(0.98) translate(-2px, 2px); }
+            100% { transform: rotate(-1deg) scale(1) translate(0, 0); }
+        }
+        .skill-item {
+            margin: 10px 0;
+            transform: rotate(-1deg);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .skill-item:hover {
+            animation: spaz 0.5s infinite;
+            color: #ff00ff;
+            text-shadow: 2px 2px #00ffff;
+        }
     </style>
 </head>
 <body>
@@ -151,13 +171,13 @@
                     <div class="title-bar">
                         <div class="title-bar-text">Skills & Abilities</div>
                     </div>
-                    <div class="window-body" style="padding: 10px;">
-                        <ul>
-                            <li>🎮 Tetris Mastery: Level 89</li>
-                            <li>🕶️ VR Navigation: Level 75</li>
-                            <li>💾 Retro Tech Affinity: Level 92</li>
-                            <li>🌐 Cyberspace Exploration: Level 67</li>
-                            <li>🎨 Vaporwave Manifestation: Level 83</li>
+                    <div class="window-body" style="padding: 10px; font-family: 'Comic Sans MS', cursive; font-size: 1.1em; background: linear-gradient(45deg, #ff69b4, #00ffff); color: #000080;">
+                        <ul style="list-style: none; padding: 0;">
+                            <li class="skill-item">🎮 TeTriS MaStErY</li>
+                            <li class="skill-item">🕶️ VR Navigation</li>
+                            <li class="skill-item">💾 we have the tEcHnology</li>
+                            <li class="skill-item">🌐 Cyberspace Exploration</li>
+                            <li class="skill-item">🎨 vApOrWaVe MaNiFeSt</li>
                         </ul>
                     </div>
                 </div>
