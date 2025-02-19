@@ -81,10 +81,58 @@
                 </div>
             </div>
             <div class="window-body" style="padding: 10px;">
-                <p>🎓 Studying Computer Science</p>
-                <p>🛠️ Working on: Random Projects</p>
-                <p>🎮 Playing: Tetris & VR Games</p>
-                <p>💭 Status: Trying to make something good of these strange hi-tech times</p>
+                <style>
+                    .status-item {
+                        font-family: 'Press Start 2P', monospace;
+                        font-size: 0.7em;
+                        padding: 8px;
+                        margin: 8px 0;
+                        border: 2px solid;
+                        border-color: #dfdfdf #808080 #808080 #dfdfdf;
+                        background: rgba(255, 255, 255, 0.7);
+                        transition: all 0.3s ease;
+                    }
+                    .status-item:hover {
+                        background: #000080;
+                        color: #ffffff;
+                        transform: translateX(5px);
+                        border-color: #808080 #dfdfdf #dfdfdf #808080;
+                    }
+                    .status-icon {
+                        display: inline-block;
+                        margin-right: 8px;
+                        transform: scale(1.2);
+                    }
+                    @keyframes pulse {
+                        0% { opacity: 1; }
+                        50% { opacity: 0.5; }
+                        100% { opacity: 1; }
+                    }
+                    .pulse {
+                        animation: pulse 2s infinite;
+                    }
+                </style>
+
+                <div class="status-item">
+                    <span class="status-icon">💻</span>
+                    Computer Science Hobbyist
+                    <span class="pulse">_</span>
+                </div>
+
+                <div class="status-item">
+                    <span class="status-icon">🛠️</span>
+                    Working on Random Projects
+                </div>
+
+                <div class="status-item">
+                    <span class="status-icon">🎮</span>
+                    Playing Tetris & VR Games
+                </div>
+
+                <div class="status-item">
+                    <span class="status-icon">💫</span>
+                    Making Something Good of These Strange Hi-Tech Times
+                </div>
             </div>
         </div>
 
